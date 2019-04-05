@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View, Modal, TouchableOpacity} from 'react-native';
 import ImageSlideShow from "./src/ImageSlideShow";
 
 const images = [
@@ -27,30 +27,45 @@ const images = [
 
 type Props = {};
 export default class App extends Component<Props> {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            modalVisible: false
+        }
+    }
+
     render() {
         return (
-            <View style={{flex: 1}}>
-                <ImageSlideShow images={images} intIndex={1} onClose={null}/>
+            <View style={styles.wrapper}>
+                <TouchableOpacity style={styles.btnShow} onPress={() => this.setState({modalVisible: true})}>
+                    <Text>Slide Show</Text>
+                </TouchableOpacity>
+
+                <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={this.state.modalVisible}
+                    onRequestClose={() => {
+                        this.setState({modalVisible: false});
+                    }}
+                >
+                    <ImageSlideShow images={images} intIndex={1} onClose={() => this.setState({modalVisible: false})}/>
+                </Modal>
             </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
+    wrapper: {flex: 1, justifyContent: 'center', marginHorizontal: 15},
+    btnShow: {
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
+        borderRadius: 25,
+        borderWidth: 1,
+        borderColor: 'green',
+        paddingVertical: 10,
     },
 });
+
